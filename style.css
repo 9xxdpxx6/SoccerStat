@@ -3,13 +3,14 @@
 	font-family: Arial;
 }
 .header {
+	background-color: black;
 	display: flex;
 	justify-content: space-around;
 	align-items: center;
 	box-shadow: 0px 5px 100px 1px rgba(0, 0, 0, 0.5);
 }
 a {
-	color: #000;
+	color: #fff;
 	text-decoration: none;
 }
 .navbar_item {
@@ -18,5 +19,4 @@ a {
 .navbar_item:hover {
 	font-size: 20pt;
 	border-bottom: 24px solid red;
-	
 }
