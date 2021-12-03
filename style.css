@@ -33,8 +33,16 @@ a {
 	padding-bottom: 5px;
 	padding-left: 15px;
 	width: 90%;
+	margin: 0 3vw;
 }
 .content_title_text {
 	font-size: 32px;
 	color: #75757B;
+}
+.leagues_list {
+	margin: 2vh 3vw;
+}
+.league {
+	background-color: #D1D1D5;
+	margin: 0 10vh;
 }

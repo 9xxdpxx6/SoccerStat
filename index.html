@@ -4,6 +4,7 @@
 	<title></title>
 	<meta charset="utf-8">
 	<link rel="stylesheet" type="text/css" href="style.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 </head>
 <body>
 	<div id="app">
@@ -15,7 +16,7 @@
 			<div class="content_title">
 				<span class="content_title_text">Список лиг</span>
 			</div>
-			<div id="app_league" class="leagues_list">
+			<div class="leagues_list">
 				<div class="league" v-for="league in leagues">{{ league.name }}</div>
 			</div>
 		</div>

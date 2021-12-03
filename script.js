@@ -9,7 +9,7 @@ new Vue ({
 			{title: '', href: ''}
 		],
 		leagues: [
-			{name: ''}
+	
 		]
 	},
 	methods: {
@@ -20,17 +20,12 @@ new Vue ({
 	}
 });
 
-fetch("https://sportscore1.p.rapidapi.com/sports/1/teams?page=1", {
-	"method": "GET",
-	"headers": {
-		"x-rapidapi-host": "sportscore1.p.rapidapi.com",
-		"x-rapidapi-key": "SIGN-UP-FOR-KEY"
-	}
-})
-.then(response => {
-	console.log(response);
-})
-.catch(err => {
-	console.error(err);
+$.ajax({
+  headers: { 'X-Auth-Token': 'f3f3dad5142049a481c69a81fdda3d0d' },
+  url: 'https://api.football-data.org/v2/competitions',
+  dataType: 'json',
+  type: 'GET',
+}).done(function(response) {
+  
+  console.log(response);
 });
-
