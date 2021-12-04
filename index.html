@@ -18,6 +18,10 @@
 			</div>
 			<div class="leagues_list">
 				<div class="league" v-for="league in leagues">{{ league.name }}</div>
+				<div class="team" v-for="team in teams">
+					{{ team }}
+					<img v-bind:src="team.icon">
+				</div>
 			</div>
 		</div>
 	</div>
