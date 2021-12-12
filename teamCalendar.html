@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>SoccerStat</title>
+	<title></title>
 	<meta charset="utf-8">
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
@@ -13,19 +13,15 @@
 				<a href="index.html"><img src="img/logo.png" height="50px">
 				<span class="logo_title">SoccerStat</span></a>
 			</div>
-			<div class="navbar_item" v-for="navbar_item in navbar_items"><a @click="goToNextPage(navbar_item.title)">{{ navbar_item.title }}</a></div>
+			<div class="navbar_item" v-for="navbar_item in navbar_items"><a v-bind:href="navbar_item.href">{{ navbar_item.title }}</a></div>
 		</div>
 		<div class="main">
 			<div class="content_title">
 				<span class="content_title_text">{{ titles[0].text }}</span>
 			</div>
-			<div class="list">
-				<div class="league api_unit" v-for="league in leagues">
-					<a href="#">
-						<span>{{ league.name }}</span>
-					</a>
-				</div>
-			</div>
+			<div class="calendar">
+        <input type="date" name="" value="">
+      </div>
 		</div>
 		<div class="footer">
 			<div class="logo">
