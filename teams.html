@@ -1,0 +1,11 @@
+<div class="content_title">
+	<span class="content_title_text">{{ titles[0].text }}</span>
+</div>
+<div class="list">
+  <div class="team api_unit" v-for="team in teams">
+    <a href="">
+      <img v-bind:src="team.icon">
+      <span>{{ team.name }}</span>
+    </a>
+  </div>
+</div>

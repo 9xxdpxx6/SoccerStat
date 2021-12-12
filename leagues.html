@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+</head>
+<body>
+	<div id="app">
+		<div class="header">
+			<div class="logo">
+				<a href="index.html"><img src="img/logo.png" height="50px">
+				<span class="logo_title">SoccerStat</span></a>
+			</div>
+			<div class="navbar_item" v-for="navbar_item in navbar_items"><a v-bind:href="navbar_item.href">{{ navbar_item.title }}</a></div>
+		</div>
+		<div class="main">
+			<div class="content_title">
+				<span class="content_title_text">{{ titles[0].text }}</span>
+			</div>
+			<div class="list">
+				<div class="league api_unit" v-for="league in leagues">
+					<a href="#">
+						<span>{{ league.name }}</span>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="footer">
+			<div class="logo">
+				<a href="index.html"><img src="img/logo.png" height="50px">
+				<span class="logo_title">SoccerStat</span></a>
+			</div>
+			<span>SoccerStat обслуживает более миллионы любителей спорта по всему миру. Мы гордимся тем, что сообщаем самые быстрые и точные новости о счете в реальном времени в Интернете. В сфере футбола мы предоставляем информацию о календаре и результатах игр, командах и таблицах лиг, статистику матчей в реальном времени и сроки проведения множества соревнований по всему миру.</span>
+			<span>Copyright ©2021 soccerstat.com / Все права защищены
+</span>
+		</div>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+	<script type="text/javascript" src="script.js"></script>
+</body>
+</html>
