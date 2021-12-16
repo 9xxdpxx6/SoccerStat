@@ -2,6 +2,14 @@
 	margin: 0;
 	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
 }
+html, body {
+	height: 100%;
+}
+.wrapper {
+	min-height: 100%;
+	display: flex;
+	flex-direction: column;
+}
 .header {
 	background-color: #1b1c1f;
 	display: flex;
@@ -12,6 +20,7 @@
 a {
 	color: #fff;
 	text-decoration: none;
+	cursor: pointer;
 }
 .logo {
 	margin-left: -80px;
@@ -32,7 +41,6 @@ a {
 .navbar_item {
 	font-size: 19px;
 	margin-right: 25px;
-	cursor: pointer;
 }
 .navbar_item > a {
 	transition: 0.1s;
@@ -44,6 +52,7 @@ a {
 	margin-top: 20px;
 	text-align: center;
 	padding: 20px 40px;
+	flex: 1 1 auto;
 }
 .content_title {
 	text-align: left;
@@ -62,6 +71,24 @@ a {
 }
 .league {
 	margin: 0 10vh;
+}
+.teams, .calendar {
+	display: none;
+}
+.duel {
+	display: flex;
+	justify-content: center;
+}
+.duel > span {
+	width: 30px;
+}
+.hometeam_container {
+	/* width: 200px; */
+	/* text-align: right; */
+}
+.awayteam_container {
+	/* width: 200px; */
+	/* text-align: left; */
 }
 .api_unit, .api_unit > a {
 	display: flex;
