@@ -28,12 +28,11 @@ let app = new Vue ({
 	//  	});
  	// },
 	methods: {
-		goToNextPage() {
+		goToNextPage(code, name) {
 			let titleBlock = document.querySelector('.content_title_text');
 			let leaguesBlock = document.querySelector('.leagues');
 			let teamsBlock = document.querySelector('.teams');
 			let calendarBlock = document.querySelector('.calendar');
-
 			if (paramType != null) {
 				if (paramCode == null) {
 					setTimeout(function()	{
@@ -52,14 +51,9 @@ let app = new Vue ({
 					}, 1500);
 				}
 				else {
-					if (paramType == "competitions") {
-						goToCalendar(competitions['competitions'][idElem]['code']);
-					}
-					else if (paramType == "teams") {
-						setTimeout(function() {
-							teamGames(teams['teams'][idElem]['id']);
-						}, 1500);
-					}
+					setTimeout(function() {
+						goToCalendar(code, name, paramType)
+					}, 1500);
 				}
 				showPreloader();
 			}
@@ -97,7 +91,23 @@ let app = new Vue ({
 		},
 	},
 	computed: {
-
+		searchElement(arr, el) {
+			let left = -1;
+			let right = arr.length;
+			while (right - left > 1) {
+				const mid = Math.floor((left + right) / 2);
+				if (arr[mid] == el) {
+					return mid;
+				}
+				if (arr[mid] > el) {
+					right = mid;
+				}
+				else {
+					left = mid;
+				}
+				return -1;
+			}
+		}
 	}
 });
 
@@ -125,7 +135,7 @@ function hidePreloader() {
 function getMatches(code, type, from, to) {
 	$.ajax({
 		headers: { 'X-Auth-Token': '0bb8f8c8f4034a7a9666874d313bbc43' },
-		url: "https://api.football-data.org/v2/" + type +"s/" + code + "/matches",
+		url: "https://api.football-data.org/v2/" + type +"/" + code + "/matches",
 		dataType: 'json',
 		type: 'GET',
 	}).done(function(response) {
@@ -164,6 +174,7 @@ $.ajax({
 			app.leagues.push(league);
 		}
 	}
+	// app.leagues.sort((a, b) => a.name > b.name ? 1 : -1);
 });
 
 $.ajax({
@@ -182,5 +193,5 @@ $.ajax({
 			app.teams.push(team);
 		}
 	}
-	console.log(response['teams']);
+	// app.leagues.sort((a, b) => a.name > b.name ? 1 : -1);
 });

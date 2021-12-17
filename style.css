@@ -112,16 +112,21 @@ a {
 	flex: 1 1 auto;
 }
 .content_title {
-	text-align: left;
+	display: flex;
+	justify-content: space-between;
 	border-bottom: 1px solid #ABABB2;
-	padding-bottom: 5px;
-	padding-left: 15px;
+	padding: 5px 15px;
 	width: 90%;
 	margin: 0 3vw;
 }
 .content_title_text {
 	font-size: 32px;
 	color: #75757B;
+}
+.search {
+	width: 20vw;
+	font-size: 20px;
+	outline: none;
 }
 .list {
 	margin: 2vh 3vw;
