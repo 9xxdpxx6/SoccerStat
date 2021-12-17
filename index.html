@@ -8,13 +8,20 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 </head>
 <body>
+	<div id='preloader'>
+		<div class='loader out'>
+			<div class='loader'>
+				<div class='loader in'></div>
+			</div>
+		</div>
+	</div>
 	<div id="app" class="wrapper">
 		<header class="header">
 			<div class="logo">
-				<a href="index.html"><img src="img/logo.png" height="50px">
+				<a href="index.html?type=competitions"><img src="img/logo.png" height="50px">
 				<span class="logo_title">SoccerStat</span></a>
 			</div>
-			<div class="navbar_item" v-for="navbar_item in navbar_items"><a href="#" @click="goToNextPage(navbar_item.title)">{{ navbar_item.title }}</a></div>
+			<div class="navbar_item" v-for="navbar_item in navbar_items"><a v-bind:href="navbar_item.href" @click="goToNextPage()">{{ navbar_item.title }}</a></div>
 		</header>
 		<main class="main">
 			<div class="content_title">
@@ -39,6 +46,7 @@
 				<div class="date_selector">
 					<input id="date_from" type="date" value="">
 					<input id="date_to" type="date" value="">
+					<input id="btn_show" type="submit" value="Показать">
 				</div>
 				<div class="matches list">
 					<div class="match" v-for="match in matches">
@@ -48,7 +56,7 @@
 						</div>
 						<div class="duel">
 							<span class="hometeam">{{ match.hometeam }}</span>
-							<span> : </span>
+							<span class="delimiter"> : </span>
 							<span class="awayteam">{{ match.awayteam }}</span>
 						</div>
 						<div class="score">

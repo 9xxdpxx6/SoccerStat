@@ -1,14 +1,16 @@
+const searchParams = new URLSearchParams(window.location.search);
+
+const paramType = searchParams.get('type');
+const paramCode = searchParams.get('code');
+const paramDateFrom = searchParams.get('dateFrom');
+const paramDateTo = searchParams.get('dateTo');
+
 let app = new Vue ({
 	el: '#app',
 	data: {
-		// titleBlock: document.querySelector('.content_title_text'),
-		// leaguesBlock: document.querySelector('.leagues'),
-		// teamsBlock: document.querySelector('.teams'),
-		// calendarBlock: document.querySelector('.calendar'),
-
 		navbar_items: [
-			{title: 'Список лиг'},
-			{title: 'Список команд'}
+			{title: 'Список лиг', href: 'index.html?type=competitions'},
+			{title: 'Список команд', href: 'index.html?type=teams'}
 		],
 		titles: [
 			{text: 'Список лиг'},
@@ -20,24 +22,46 @@ let app = new Vue ({
 		teams: [],
 		matches: []
 	},
+	// mounted() {
+	// 	window.addEventListener('load', () => {
+	// 		this.goToNextPage();
+	//  	});
+ 	// },
 	methods: {
-		goToNextPage(title) {
+		goToNextPage() {
 			let titleBlock = document.querySelector('.content_title_text');
 			let leaguesBlock = document.querySelector('.leagues');
 			let teamsBlock = document.querySelector('.teams');
 			let calendarBlock = document.querySelector('.calendar');
 
-			if (title == this.titles[0].text) {
-				titleBlock.innerHTML = this.titles[0].text;
-				leaguesBlock.style.display = 'block';
-				teamsBlock.style.display = 'none';
-				calendarBlock.style.display = 'none';
-			}
-			if (title == this.titles[1].text) {
-				titleBlock.innerHTML = this.titles[1].text;
-				leaguesBlock.style.display = 'none';
-				teamsBlock.style.display = 'block';
-				calendarBlock.style.display = 'none';
+			if (paramType != null) {
+				if (paramCode == null) {
+					setTimeout(function()	{
+						if (paramType == "competitions") {
+							titleBlock.innerHTML = this.titles[0].text;
+							leaguesBlock.style.display = 'block';
+							teamsBlock.style.display = 'none';
+							calendarBlock.style.display = 'none';
+						}
+						else if (paramType == "teams") {
+							titleBlock.innerHTML = this.titles[1].text;
+							leaguesBlock.style.display = 'none';
+							teamsBlock.style.display = 'block';
+							calendarBlock.style.display = 'none';
+						}
+					}, 1500);
+				}
+				else {
+					if (paramType == "competitions") {
+						goToCalendar(competitions['competitions'][idElem]['code']);
+					}
+					else if (paramType == "teams") {
+						setTimeout(function() {
+							teamGames(teams['teams'][idElem]['id']);
+						}, 1500);
+					}
+				}
+				showPreloader();
 			}
 		},
 		goToCalendar(code, name, type) {
@@ -64,7 +88,6 @@ let app = new Vue ({
 
 			if (type == 'competition') {
 				titleBlock.innerHTML = this.titles[2].text + name;
-				// this.goToLeague(code, dateAgo, today);
 				getMatches(code, type, dateToInput, dateFromInput);
 			}
 			else if (type == 'team') {
@@ -72,36 +95,6 @@ let app = new Vue ({
 				getMatches(code, type, dateToInput, dateFromInput);
 			}
 		},
-		goToLeague(code, dateFromInput, dateToInput) {
-			$.ajax({
-				headers: { 'X-Auth-Token': '0bb8f8c8f4034a7a9666874d313bbc43' },
-				url: "https://api.football-data.org/v2/competitions/" + code + "/matches",
-				dataType: 'json',
-				type: 'GET',
-			}).done(function(response) {
-				for (let i = 0; i < response['matches'].length; i++) {
-					// let gameDate = new Date(response['matches'][i]['utcDate']);
-					if (dateFromInput > dateToInput) {
-						alert('Дата начала больше даты окончания');
-					}
-					// else //if (gameDate > dateToInput || gameDate < dateFromInput)
-					// {
-					// 	console.log("sdfsdf");
-					// 	let match = {
-					// 		date: gameDate.getDate() + '.' + String(gameDate.getMonth()).padStart(2, '0') + '.' + gameDate.getFullYear(),
-					// 		time: gameDate.getHours() + ':' + String(gameDate.getMinutes()).padStart(2, '0'),
-					// 		hometeam: response['matches'][i]['homeTeam']['name'],
-					// 		awayteam: response['matches'][i]['awayTeam']['name'],
-					// 		score: response['matches'][i]['status'] == 'FINISHED' ? response['matches'][i]['score']['fullTime']['homeTeam'] + ':' + response['matches'][i]['score']['fullTime']['awayTeam'] : 'Матч перенесён или продолжается'
-					// 	}
-					// 	this.matches.push(match);
-					// 	console.log(match);
-					// }
-				}
-				console.log(response);
-				// console.log(this.matches);
-			});
-		}
 	},
 	computed: {
 
@@ -110,32 +103,24 @@ let app = new Vue ({
 
 
 
-// $.ajax({
-// 	headers: { 'X-Auth-Token': '0bb8f8c8f4034a7a9666874d313bbc43' },
-// 	url: "https://api.football-data.org/v2/competitions/" + code + "/matches",
-// 	dataType: 'json',
-// 	type: 'GET',
-// }).done(function(response) {
-// 	for (let i = 0; i < response['matches'].length; i++) {
-// 		let gameDate = new Date(response['matches'][i]['utcDate']);
-// 		if (dateFromInput > dateToInput) {
-// 			alert('Дата начала больше даты окончания');
-// 		}
-// 		else if (gameDate > dateToInput || gameDate < dateFromInput)
-// 		{
-// 			let match = {
-// 				date: gameDate.getDate() + '.' + gameDate.getMonth() + '.' + gameDate.getFullYear(),
-// 				time: gameDate.getHours() + ':' + gameDate.getMinutes(),
-// 				hometeam: response['matches'][i]['homeTeam']['name'],
-// 				awayteam: response['matches'][i]['awayTeam']['name'],
-// 				score: response['matches'][i]['status'] == 'FINISHED' ? response['matches'][i]['score']['fullTime']['homeTeam'] + ':' + response['matches'][i]['score']['fullTime']['awayTeam'] : 'Матч перенесён или продолжается'
-// 			}
-// 			app.matches.push(match);
-// 		}
-// 	}
-// });
+window.onload = function () {
+  document.body.classList.add('loaded_hiding');
+  window.setTimeout(function () {
+    document.body.classList.add('loaded');
+    document.body.classList.remove('loaded_hiding');
+  }, 500);
+}
 
-// TODO: всунуть верхний к лигам!!! (в цикл второй ajax) либо в вуе
+function showPreloader() {
+	let preloader = document.querySelector('#preloader')
+	preloader.style.visibility = 'visible';
+	preloader.style.opacity = 1;
+}
+function hidePreloader() {
+	let preloader = document.querySelector('#preloader')
+	preloader.style.visibility = 'hidden';
+	preloader.style.opacity = 0;
+}
 
 function getMatches(code, type, from, to) {
 	$.ajax({
@@ -156,10 +141,9 @@ function getMatches(code, type, from, to) {
 					time: gameDate.getHours() + ':' + String(gameDate.getMinutes()).padStart(2, '0'),
 					hometeam: response['matches'][i]['homeTeam']['name'],
 					awayteam: response['matches'][i]['awayTeam']['name'],
-					score: response['matches'][i]['status'] == 'FINISHED' ? response['matches'][i]['score']['fullTime']['homeTeam'] + ' - ' + response['matches'][i]['score']['fullTime']['awayTeam'] : 'Матч перенесён или продолжается'
+					score: response['matches'][i]['status'] == 'FINISHED' ? response['matches'][i]['score']['fullTime']['homeTeam'] + ' - ' + response['matches'][i]['score']['fullTime']['awayTeam'] : 'Не окончен'
 				}
 				app.matches.push(match);
-				console.log(response);
 			}
 		}
 	});
