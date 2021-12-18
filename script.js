@@ -2,12 +2,13 @@ const searchParams = new URLSearchParams(window.location.search);
 
 const paramType = searchParams.get('type');
 const paramCode = searchParams.get('code');
-const paramDateFrom = searchParams.get('dateFrom');
-const paramDateTo = searchParams.get('dateTo');
 
 let app = new Vue ({
 	el: '#app',
 	data: {
+		currentCode: '',
+		currentName: '',
+		currentType: '',
 		navbar_items: [
 			{title: 'Список лиг', href: 'index.html?type=competitions'},
 			{title: 'Список команд', href: 'index.html?type=teams'}
@@ -22,43 +23,32 @@ let app = new Vue ({
 		teams: [],
 		matches: []
 	},
-	// mounted() {
-	// 	window.addEventListener('load', () => {
-	// 		this.goToNextPage();
-	//  	});
- 	// },
+	mounted() {
+		this.goToNextPage();
+	},
 	methods: {
 		goToNextPage(code, name) {
 			let titleBlock = document.querySelector('.content_title_text');
 			let leaguesBlock = document.querySelector('.leagues');
 			let teamsBlock = document.querySelector('.teams');
 			let calendarBlock = document.querySelector('.calendar');
-			if (paramType != null) {
-				if (paramCode == null) {
-					setTimeout(function()	{
-						if (paramType == "competitions") {
-							titleBlock.innerHTML = this.titles[0].text;
-							leaguesBlock.style.display = 'block';
-							teamsBlock.style.display = 'none';
-							calendarBlock.style.display = 'none';
-						}
-						else if (paramType == "teams") {
-							titleBlock.innerHTML = this.titles[1].text;
-							leaguesBlock.style.display = 'none';
-							teamsBlock.style.display = 'block';
-							calendarBlock.style.display = 'none';
-						}
-					}, 1500);
-				}
-				else {
-					setTimeout(function() {
-						goToCalendar(code, name, paramType)
-					}, 1500);
-				}
-				showPreloader();
+			if (paramType == "competitions") {
+				titleBlock.innerHTML = this.titles[0].text;
+				leaguesBlock.style.display = 'block';
+				teamsBlock.style.display = 'none';
+				calendarBlock.style.display = 'none';
+			}
+			else if (paramType == "teams") {
+				titleBlock.innerHTML = this.titles[1].text;
+				leaguesBlock.style.display = 'none';
+				teamsBlock.style.display = 'block';
+				calendarBlock.style.display = 'none';
 			}
 		},
 		goToCalendar(code, name, type) {
+			this.currentCode = code;
+			this.currentName = name;
+			this.currentType = paramType;
 			let titleBlock = document.querySelector('.content_title_text');
 			let leaguesBlock = document.querySelector('.leagues');
 			let teamsBlock = document.querySelector('.teams');
@@ -74,63 +64,64 @@ let app = new Vue ({
 			today = yyyy + '-' + mm + '-' + dd;
 			dateAgo = yyyyAgo + '-' + mm + '-' + dd;
 
-			leaguesBlock.style.display = 'none';
-			teamsBlock.style.display = 'none';
-			calendarBlock.style.display = 'block';
 			dateFromInput.value = dateAgo;
 			dateToInput.value = today;
 
-			if (type == 'competition') {
+			leaguesBlock.style.display = 'none';
+			teamsBlock.style.display = 'none';
+			calendarBlock.style.display = 'block';
+
+			if (type == 'competitions') {
 				titleBlock.innerHTML = this.titles[2].text + name;
-				getMatches(code, type, dateToInput, dateFromInput);
+				getMatches(this.currentCode, paramType, dateToInput, dateFromInput);
 			}
-			else if (type == 'team') {
+			else if (type == 'teams') {
 				titleBlock.innerHTML = this.titles[3].text + name;
-				getMatches(code, type, dateToInput, dateFromInput);
+				getMatches(this.currentCode, paramType, dateToInput, dateFromInput);
 			}
 		},
 	},
 	computed: {
-		searchElement(arr, el) {
-			let left = -1;
-			let right = arr.length;
-			while (right - left > 1) {
-				const mid = Math.floor((left + right) / 2);
-				if (arr[mid] == el) {
-					return mid;
-				}
-				if (arr[mid] > el) {
-					right = mid;
-				}
-				else {
-					left = mid;
-				}
-				return -1;
-			}
-		}
+		// searchElement(arr, el) {
+		// 	let left = -1;
+		// 	let right = arr.length;
+		// 	while (right - left > 1) {
+		// 		const mid = Math.floor((left + right) / 2);
+		// 		if (arr[mid] == el) {
+		// 			return mid;
+		// 		}
+		// 		if (arr[mid] > el) {
+		// 			right = mid;
+		// 		}
+		// 		else {
+		// 			left = mid;
+		// 		}
+		// 		return -1;
+		// 	}
+		// }
 	}
 });
 
 
 
-window.onload = function () {
-  document.body.classList.add('loaded_hiding');
-  window.setTimeout(function () {
-    document.body.classList.add('loaded');
-    document.body.classList.remove('loaded_hiding');
-  }, 500);
-}
+// window.onload = function () {
+//   document.body.classList.add('loaded_hiding');
+//   window.setTimeout(function () {
+//     document.body.classList.add('loaded');
+//     document.body.classList.remove('loaded_hiding');
+//   }, 500);
+// }
 
-function showPreloader() {
-	let preloader = document.querySelector('#preloader')
-	preloader.style.visibility = 'visible';
-	preloader.style.opacity = 1;
-}
-function hidePreloader() {
-	let preloader = document.querySelector('#preloader')
-	preloader.style.visibility = 'hidden';
-	preloader.style.opacity = 0;
-}
+// function showPreloader() {
+// 	let preloader = document.querySelector('#preloader')
+// 	preloader.style.visibility = 'visible';
+// 	preloader.style.opacity = 1;
+// }
+// function hidePreloader() {
+// 	let preloader = document.querySelector('#preloader')
+// 	preloader.style.visibility = 'hidden';
+// 	preloader.style.opacity = 0;
+// }
 
 function getMatches(code, type, from, to) {
 	$.ajax({
@@ -174,7 +165,7 @@ $.ajax({
 			app.leagues.push(league);
 		}
 	}
-	// app.leagues.sort((a, b) => a.name > b.name ? 1 : -1);
+	app.leagues.sort((a, b) => a.name > b.name ? 1 : -1);
 });
 
 $.ajax({
@@ -193,5 +184,5 @@ $.ajax({
 			app.teams.push(team);
 		}
 	}
-	// app.leagues.sort((a, b) => a.name > b.name ? 1 : -1);
+	app.leagues.sort((a, b) => a.name > b.name ? 1 : -1);
 });

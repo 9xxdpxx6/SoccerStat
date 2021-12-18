@@ -8,17 +8,10 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 </head>
 <body>
-	<!-- <div id='preloader'>
-		<div class='loader out'>
-			<div class='loader'>
-				<div class='loader in'></div>
-			</div>
-		</div>
-	</div> -->
 	<div id="app" class="wrapper">
 		<header class="header">
 			<div class="logo">
-				<a href="index.html?type=competitions"><img src="img/logo.png" height="50px">
+				<a href="index.html"><img src="img/logo.png" height="50px">
 				<span class="logo_title">SoccerStat</span></a>
 			</div>
 			<div class="navbar_item" v-for="navbar_item in navbar_items"><a v-bind:href="navbar_item.href" @click="goToNextPage()">{{ navbar_item.title }}</a></div>
@@ -26,19 +19,17 @@
 		<main class="main">
 			<div class="content_title">
 				<span class="content_title_text">{{ titles[0].text }}</span>
-				<!-- <input type="search" class="search" value=""> -->
-				</div>
 			</div>
 			<div class="leagues list">
 				<div class="league api_unit" v-for="league in leagues">
-					<a href="#" @click="goToCalendar(league.code, league.name)">
+					<a href="#" @click="goToCalendar(league.code, league.name, 'competitions')">
 						<span>{{ league.name }}</span>
 					</a>
 				</div>
 			</div>
 			<div class="teams list">
 			  <div class="team api_unit" v-for="team in teams">
-			    <a href="#" @click="goToCalendar(team.code, team.name)">
+			    <a href="#" @click="goToCalendar(team.code, team.name, 'teams')">
 			      <img v-bind:src="team.icon">
 			      <span>{{ team.name }}</span>
 			    </a>
@@ -46,9 +37,9 @@
 			</div>
 			<div class="calendar">
 				<div class="date_selector">
-					<input id="date_from" type="date" value="">
-					<input id="date_to" type="date" value="">
-					<input id="btn_show" type="submit" value="Показать">
+					<input id="date_from" type="date" value="2021-12-01">
+					<input id="date_to" type="date" value="2021-12-10">
+					<input id="btn_show" type="submit" value="Показать" @click="goToCalendar(currentCode, currentName, currentType)">
 				</div>
 				<div class="matches list">
 					<div class="match" v-for="match in matches">
@@ -61,7 +52,7 @@
 							<span class="delimiter"> : </span>
 							<span class="awayteam">{{ match.awayteam }}</span>
 						</div>
-						<div class="score">
+						<div class="score_container">
 							<span class="score">{{ match.score }}</span>
 						</div>
 					</div>
