@@ -37,8 +37,8 @@
 			</div>
 			<div class="calendar">
 				<div class="date_selector">
-					<input id="date_from" type="date" value="2021-12-01">
-					<input id="date_to" type="date" value="2021-12-10">
+					<input id="date_from" type="date" v-model="dateFrom" value="2021-12-01">
+					<input id="date_to" type="date" v-model="dateTo" value="2021-12-10">
 					<input id="btn_show" type="submit" value="Показать" @click="goToCalendar(currentCode, currentName, currentType)">
 				</div>
 				<div class="matches list">

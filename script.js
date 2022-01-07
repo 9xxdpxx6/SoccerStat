@@ -3,6 +3,23 @@ const searchParams = new URLSearchParams(window.location.search);
 const paramType = searchParams.get('type');
 const paramCode = searchParams.get('code');
 
+let lastScroll = 0;
+const defaultOffset = 200;
+const header = document.querySelector('.header');
+
+const scrollPosition = () => window.pageYOffset || document.documentElement.scrollTop;
+const containHide = () => header.classList.contains('hide');
+
+window.addEventListener('scroll', () => {
+  if(scrollPosition() > lastScroll && !containHide() && scrollPosition() > defaultOffset) {
+    header.classList.add('hide');
+  }
+  else if(scrollPosition() < lastScroll && containHide()){
+    header.classList.remove('hide');
+  }
+  lastScroll = scrollPosition();
+});
+
 let app = new Vue ({
 	el: '#app',
 	data: {
@@ -21,10 +38,22 @@ let app = new Vue ({
 		],
 		leagues: [],
 		teams: [],
-		matches: []
+		matches: [],
+		dateFrom: null,
+		dateTo: null,
 	},
 	mounted() {
 		this.goToNextPage();
+		let today = new Date();
+		let dd = String(today.getDate()).padStart(2, '0');
+		let mm = String(today.getMonth() + 1).padStart(2, '0');
+		let yyyy = today.getFullYear();
+		let yyyyAgo = today.getFullYear() - 10;
+		today = yyyy + '-' + mm + '-' + dd;
+		dateAgo = yyyyAgo + '-' + mm + '-' + dd;
+
+		this.dateFrom = dateAgo;
+		this.dateTo = today;
 	},
 	methods: {
 		goToNextPage(code, name) {
@@ -53,19 +82,6 @@ let app = new Vue ({
 			let leaguesBlock = document.querySelector('.leagues');
 			let teamsBlock = document.querySelector('.teams');
 			let calendarBlock = document.querySelector('.calendar');
-			let dateFromInput = document.querySelector('#date_from');
-			let dateToInput = document.querySelector('#date_to');
-
-			let today = new Date();
-			let dd = String(today.getDate()).padStart(2, '0');
-			let mm = String(today.getMonth() + 1).padStart(2, '0');
-			let yyyy = today.getFullYear();
-			let yyyyAgo = today.getFullYear() - 10;
-			today = yyyy + '-' + mm + '-' + dd;
-			dateAgo = yyyyAgo + '-' + mm + '-' + dd;
-
-			dateFromInput.value = dateAgo;
-			dateToInput.value = today;
 
 			leaguesBlock.style.display = 'none';
 			teamsBlock.style.display = 'none';
@@ -73,15 +89,21 @@ let app = new Vue ({
 
 			if (type == 'competitions') {
 				titleBlock.innerHTML = this.titles[2].text + name;
-				getMatches(this.currentCode, paramType, dateToInput, dateFromInput);
+				getMatches(this.currentCode, paramType, this.dateFrom, this.dateTo);
 			}
 			else if (type == 'teams') {
 				titleBlock.innerHTML = this.titles[3].text + name;
-				getMatches(this.currentCode, paramType, dateToInput, dateFromInput);
+				getMatches(this.currentCode, paramType, this.dateFrom, this.dateTo);
 			}
 		},
 	},
 	computed: {
+		// filterList() {
+		// 	if(this.dateFrom && this.dateTo) {
+		// 		return this.getMatches
+		// 	}
+		// }
+
 		// searchElement(arr, el) {
 		// 	let left = -1;
 		// 	let right = arr.length;
@@ -135,10 +157,10 @@ function getMatches(code, type, from, to) {
 			if (from > to) {
 				alert('Дата начала больше даты окончания');
 			}
-			else if (!(gameDate > to || gameDate < from))
+			else //if (!(gameDate > to || gameDate < from))
 			{
 				let match = {
-					date: String(gameDate.getDate()).padStart(2, '0') + '.' + String(gameDate.getMonth()).padStart(2, '0') + '.' + gameDate.getFullYear(),
+					date: String(gameDate.getDate()).padStart(2, '0') + '.' + String(gameDate.getMonth() + 1).padStart(2, '0') + '.' + gameDate.getFullYear(),
 					time: gameDate.getHours() + ':' + String(gameDate.getMinutes()).padStart(2, '0'),
 					hometeam: response['matches'][i]['homeTeam']['name'],
 					awayteam: response['matches'][i]['awayTeam']['name'],

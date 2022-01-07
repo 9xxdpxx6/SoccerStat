@@ -5,6 +5,9 @@
 html, body {
 	height: 100%;
 }
+body {
+	padding-top: 50px;
+}
 #preloader {
 	top: 0;
 	left: 0;
@@ -23,8 +26,6 @@ html, body {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-  /* top: 45%;
-	left: 47%; */
   width: 150px;
   height: 150px;
   border: 2px solid #fff;
@@ -69,10 +70,20 @@ html, body {
 }
 .header {
 	background-color: #1b1c1f;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 3;
 	display: flex;
 	justify-content: space-around;
 	align-items: center;
+	height: 50px;
 	box-shadow: 0px 5px 50px 1px rgba(0, 0, 0, 0.5);
+	transition: 0.15s;
+}
+.header.hide {
+  transform: translateY(-50px);
 }
 a {
 	color: #fff;
@@ -179,8 +190,7 @@ a {
 	font-size: 20px;
 	background-color: #1b1c1f;
 	color: #fff;
-	width: 80px;
-	height: 40px;
+	padding: 10px 20px;
 	margin-top: 10px;
 }
 .delimiter {
